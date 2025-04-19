@@ -27,13 +27,6 @@ export function useTaskManager() {
     statusFilter.value = '全て';
   };
 
-  const taskInput = ref('');
-  const taskDescription = ref('');
-  const internshipInput = ref('');
-  const statusInput = ref('');
-  const currentJobInput = ref('');
-  const annualIncomeInput = ref<number | null>(null);
-
   // データ取得
   onMounted(async () => {
     try {
@@ -48,26 +41,20 @@ export function useTaskManager() {
     }
   });
 
-  const handleSubmit = async () => {
-    if (taskInput.value.trim() !== '' || taskDescription.value.trim() !== '') {
+  const handleSubmit = async (taskData: any) => {
+    if (taskData.title.trim() !== '' || taskData.description.trim() !== '') {
       const newPeople = {
-        title: taskInput.value,
-        internship: internshipInput.value,
-        status: statusInput.value,
-        currentJob: currentJobInput.value,
-        annualIncome: annualIncomeInput.value,
+        title: taskData.title,
+        internship: taskData.internship,
+        status: taskData.status,
+        currentJob: taskData.currentJob,
+        annualIncome: taskData.annualIncome,
         timestamp: new Date(),
       };
 
       try {
         const docRef = await addDoc(collection(db, 'tasks'), newPeople);
         todoList.unshift({ ...newPeople, id: docRef.id });
-        taskInput.value = '';
-        taskDescription.value = '';
-        internshipInput.value = '';
-        statusInput.value = '';
-        currentJobInput.value = '';
-        annualIncomeInput.value = null;
       } catch (error) {
         console.error('Firestoreへのメッセージ保存に失敗しました:', error);
       }
@@ -89,12 +76,6 @@ export function useTaskManager() {
   const handleEdit = (item: any) => {
     item.originalTitle = item.title;
     item.isEditing = true;
-
-    taskInput.value = item.title;
-    internshipInput.value = item.internship || '';
-    statusInput.value = item.status || '';
-    currentJobInput.value = item.currentJob || '';
-    annualIncomeInput.value = item.annualIncome || null;
   };
 
   const handleSave = async (item: any) => {
@@ -102,10 +83,10 @@ export function useTaskManager() {
       const taskDoc = doc(db, 'tasks', item.id);
       await updateDoc(taskDoc, {
         title: item.title,
-        internship: internshipInput.value,
-        status: statusInput.value,
-        currentJob: currentJobInput.value,
-        annualIncome: annualIncomeInput.value,
+        internship: item.internship,
+        status: item.status,
+        currentJob: item.currentJob,
+        annualIncome: item.annualIncome,
       });
 
       item.isEditing = false;
@@ -123,20 +104,13 @@ export function useTaskManager() {
 
   return {
     statusFilter,
-    todoList,
     filteredList,
-    taskInput,
-    taskDescription,
-    internshipInput,
-    statusInput,
-    currentJobInput,
-    annualIncomeInput,
+    todoList,
     handleSubmit,
     handleDelete,
     handleEdit,
     handleSave,
     handleCancelEdit,
     clearFilter,
-    cards: ['該当者リスト'],
   };
 }

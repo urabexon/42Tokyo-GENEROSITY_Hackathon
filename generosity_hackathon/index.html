@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>みんなの進路 - 匿名進路情報共有サイト</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>みんなの進路</h1>
+      <p>先輩たちの進路情報を匿名で共有・閲覧できるサイト</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="search-section">
+      <h2>進路情報を検索</h2>
+      <div class="search-form">
+        <input type="text" id="search-keyword" placeholder="大学名、学部、企業名などで検索">
+        <select id="career-type-filter">
+          <option value="all">すべての進路</option>
+          <option value="university">大学</option>
+          <option value="college">短期大学</option>
+          <option value="vocational">専門学校</option>
+          <option value="employment">就職</option>
+          <option value="other">その他</option>
+        </select>
+        <button id="search-button">検索</button>
+      </div>
+    </section>
+
+    <section class="results-section">
+      <h2>検索結果</h2>
+      <div id="career-list" class="career-list">
+        <!-- JavaScriptで動的に生成される進路情報が表示される -->
+        <p class="loading">データを読み込み中...</p>
+      </div>
+    </section>
+
+    <section class="submit-section">
+      <h2>進路情報を共有する</h2>
+      <form id="career-form">
+        <div class="form-group">
+          <label for="career-type">進路タイプ *</label>
+          <select id="career-type" required>
+            <option value="">選択してください</option>
+            <option value="university">大学</option>
+            <option value="college">短期大学</option>
+            <option value="vocational">専門学校</option>
+            <option value="employment">就職</option>
+            <option value="other">その他</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="name">学校名/企業名 *</label>
+          <input type="text" id="name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="department">学部・学科/部署</label>
+          <input type="text" id="department">
+        </div>
+
+        <div class="form-group">
+          <label for="location">所在地</label>
+          <input type="text" id="location">
+        </div>
+
+        <div class="form-group">
+          <label for="details">詳細情報</label>
+          <textarea id="details" rows="4" placeholder="試験内容、難易度、雰囲気など"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="tips">後輩へのアドバイス</label>
+          <textarea id="tips" rows="4" placeholder="準備方法、おすすめの勉強法など"></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit">送信する</button>
+          <p class="note">* すべての情報は匿名で共有されます</p>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 みんなの進路 - ハッカソン制作</p>
+    </div>
+  </footer>
+
+  <!-- Firebase App (the core Firebase SDK) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.3.1/firebase-app-compat.min.js"></script>
+  <!-- Firebase Firestore -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.3.1/firebase-firestore-compat.min.js"></script>
+  <!-- Firebase Authentication -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.3.1/firebase-auth-compat.min.js"></script>
+
+  <!-- Firebase Configuration -->
+  <script src="firebase-config.js"></script>
+  <!-- Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>

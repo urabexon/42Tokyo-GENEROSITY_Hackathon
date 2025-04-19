@@ -1,29 +1,43 @@
-<script lang="ts" setup>
+<script setup lang="ts">
+import { ref } from 'vue';
 import { useTaskManager } from '@/components/useTaskManager';
+import TaskList from '@/components/TaskList.vue';
+import TaskForm from '@/components/TaskForm.vue';
+
 const {
   statusFilter,
-  todoList,
   filteredList,
-  taskInput,
-  taskDescription,
-  internshipInput,
-  statusInput,
-  currentJobInput,
-  annualIncomeInput,
   handleSubmit,
   handleDelete,
   handleEdit,
   handleSave,
   handleCancelEdit,
   clearFilter,
-  cards,
 } = useTaskManager();
+
+// 親コンポーネントで状態を管理
+const taskInput = ref('');
+const taskDescription = ref('');
+const internshipInput = ref('');
+const statusInput = ref('');
+const currentJobInput = ref('');
+const annualIncomeInput = ref<number | null>(null);
+
+// v-modelの更新用メソッド
+const updateModelValue = (newValue: any) => {
+  taskInput.value = newValue.taskInput;
+  taskDescription.value = newValue.taskDescription;
+  internshipInput.value = newValue.internshipInput;
+  statusInput.value = newValue.statusInput;
+  currentJobInput.value = newValue.currentJobInput;
+  annualIncomeInput.value = newValue.annualIncomeInput;
+};
 </script>
 
 <template>
   <v-app>
     <v-main>
-      <!-- ステータス絞り込み -->
+      <!-- フィルター -->
       <v-container class="pt-4" fluid>
         <v-select
           v-model="statusFilter"
@@ -34,7 +48,7 @@ const {
         />
       </v-container>
 
-      <!-- 件数表示とクリア -->
+      <!-- 件数 -->
       <v-container class="text-center mb-4">
         <div>
           {{ filteredList.length }}件見つかりました
@@ -45,99 +59,40 @@ const {
       </v-container>
 
       <!-- リスト表示 -->
-      <v-container class="py-8 px-6" fluid>
-        <v-row>
-          <v-col v-for="card in cards" :key="card" cols="12">
-            <v-card>
-              <v-list lines="two">
-                <v-list-subheader>{{ card }}</v-list-subheader>
+      <TaskList
+  :cards="['カード1', 'カード2', 'カード3']"
+  :filteredList="filteredList"
+  :internshipInput="internshipInput"
+  :statusInput="statusInput"
+  :currentJobInput="currentJobInput"
+  :annualIncomeInput="annualIncomeInput"
+  :handleEdit="handleEdit"
+  :handleDelete="handleDelete"
+  :handleSave="handleSave"
+  :handleCancelEdit="handleCancelEdit"
+/>
 
-                <template v-for="(item, index) in filteredList" :key="index">
-                  <v-list-item>
-                    <template #prepend>
-                      <v-avatar color="grey-darken-1" size="24"></v-avatar>
-                    </template>
-                    <div class="mcon">
-                      <div v-if="item.isEditing">
-                        <v-text-field v-model="item.title" label="ニックネームを編集" dense />
-                        <v-text-field v-model="internshipInput" label="インターン経験" class="mx-2" />
-                        <v-select
-                          v-model="statusInput"
-                          :items="['在校生', '卒業生', 'トランスファー']"
-                          label="ステータス"
-                          class="mx-2"
-                        />
-                        <v-text-field v-model="currentJobInput" label="今の職場" class="mx-2" />
-                        <v-text-field
-                          v-model="annualIncomeInput"
-                          label="年収（万円）"
-                          type="number"
-                          class="mx-2"
-                        />
-                        <v-btn @click="handleSave(item)" color="success" small>保存</v-btn>
-                        <v-btn @click="handleCancelEdit(item)" color="error" small>キャンセル</v-btn>
-                      </div>
-                      <div v-else class="todo-item">
-                        <div class="text-content">
-                          <v-list-item-title class="task">{{ item.title }}</v-list-item-title>
-                          <v-list-item-subtitle>{{ item.description }}</v-list-item-subtitle>
-                        </div>
-                        <v-btn size="30" @click="handleEdit(item)" icon>
-                          <v-icon>mdi-pencil</v-icon>
-                        </v-btn>
-                        <v-btn size="30" @click="handleDelete(item.id)" icon>
-                          <v-icon>mdi-delete</v-icon>
-                        </v-btn>
-                      </div>
-                    </div>
-                  </v-list-item>
-                  <v-divider v-if="index !== filteredList.length - 1" :key="`divider-${index}`" inset></v-divider>
-                </template>
-              </v-list>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-container>
+      <!-- 新規フォーム -->
+      <TaskForm
+  :modelValue="{
+    taskInput,
+    taskDescription,
+    internshipInput,
+    statusInput,
+    currentJobInput,
+    annualIncomeInput
+  }"
+  @update:modelValue="updateModelValue"
+  @submit="handleSubmit({
+    title: taskInput,
+    description: taskDescription,
+    internship: internshipInput,
+    status: statusInput,
+    currentJob: currentJobInput,
+    annualIncome: annualIncomeInput,
+  })"
+/>
 
-      <!-- 新規入力フォーム -->
-      <v-container class="input-container">
-        <div class="input-form">
-          <v-text-field
-            v-model="taskInput"
-            class="mx-2"
-            label="ニックネーム"
-          />
-          <v-text-field
-            v-model="internshipInput"
-            label="インターン経験"
-            class="mx-2"
-          />
-          <v-select
-            v-model="statusInput"
-            :items="['在校生', '卒業生', 'トランスファー']"
-            label="ステータス"
-            class="mx-2"
-          />
-          <v-text-field
-            v-model="currentJobInput"
-            label="今の職場"
-            class="mx-2"
-          />
-          <v-text-field
-            v-model="annualIncomeInput"
-            label="年収（万円）"
-            type="number"
-            class="mx-2"
-          />
-          <v-btn size="55" class="submit-button" @click="handleSubmit" type="submit">
-            送信
-          </v-btn>
-        </div>
-      </v-container>
     </v-main>
   </v-app>
 </template>
-
-<style scoped>
-/* 追加のスタイル */
-</style>

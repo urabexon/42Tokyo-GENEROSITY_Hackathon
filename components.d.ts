@@ -8,8 +8,12 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AppTemplate: typeof import('./src/components/AppTemplate.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    TaskForm: typeof import('./src/components/TaskForm.vue')['default']
+    TaskItem: typeof import('./src/components/TaskItem.vue')['default']
+    TaskList: typeof import('./src/components/TaskList.vue')['default']
   }
 }

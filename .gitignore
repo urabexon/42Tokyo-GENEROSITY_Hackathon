@@ -60,3 +60,4 @@ dkms.conf
 Zone.Identifier
 *.dSTM/
 tmp/
+.env

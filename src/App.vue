@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<!-- <script lang="ts" setup>
 import { onMounted, ref, reactive } from 'vue';
 import { db } from '@/firebase/firebase.ts';
 import {
@@ -245,4 +245,13 @@ onMounted(async () => {
 .text-content {
   flex-grow: 1;
 }
-</style>
+</style> -->
+
+<!-- src/views/Home.vue -->
+<script setup lang="ts">
+  import HomeList from '@/views/Home.vue';
+</script>
+
+<template>
+  <HomeList/>
+</template>

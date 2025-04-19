@@ -1,51 +1,51 @@
-<!-- src/views/Home.vue -->
 <script setup lang="ts">
-import { onMounted, reactive } from 'vue';
+import { ref, onMounted } from 'vue';
+import { db } from '@/firebase/firebase';
 import {
   collection,
-  getDocs,
   addDoc,
-  deleteDoc,
+  getDocs,
   doc,
   updateDoc,
+  deleteDoc,
   query,
   orderBy
 } from 'firebase/firestore';
-import { db } from '@/firebase/firebase';
+
 import TopForm from '@/components/TopForm.vue';
 import TopList from '@/components/TopList.vue';
 
-const todoList = reactive([]);
+const items = ref<any[]>([]);
+
+const fetchData = async () => {
+  const q = query(collection(db, 'tasks'), orderBy('timestamp', 'desc'));
+  const snapshot = await getDocs(q);
+  items.value = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+};
+
+onMounted(fetchData);
 
 const handleSubmit = async (newItem) => {
-  const docRef = await addDoc(collection(db, "tasks"), newItem);
-  todoList.unshift({ ...newItem, id: docRef.id });
+  const docRef = await addDoc(collection(db, 'tasks'), newItem);
+  items.value.unshift({ ...newItem, id: docRef.id });
+};
+
+const handleUpdate = async (updatedItem) => {
+  const refDoc = doc(db, 'tasks', updatedItem.id);
+  await updateDoc(refDoc, updatedItem);
+  const index = items.value.findIndex(item => item.id === updatedItem.id);
+  if (index !== -1) items.value[index] = updatedItem;
 };
 
 const handleDelete = async (id) => {
-  await deleteDoc(doc(db, "tasks", id));
-  const index = todoList.findIndex((tsk) => tsk.id === id);
-  if (index !== -1) {
-    todoList.splice(index, 1);
-  }
+  await deleteDoc(doc(db, 'tasks', id));
+  items.value = items.value.filter(item => item.id !== id);
 };
-
-const handleUpdate = async (item) => {
-  await updateDoc(doc(db, "tasks", item.id), item);
-};
-
-onMounted(async () => {
-  const q = query(collection(db, "tasks"), orderBy("timestamp", "desc"));
-  const snapshot = await getDocs(q);
-  snapshot.forEach((doc) => {
-    todoList.push({ ...doc.data(), id: doc.id });
-  });
-});
 </script>
 
 <template>
-  <v-container class="py-8 px-6" fluid>
-    <TopList :items="todoList" @delete="handleDelete" @update="handleUpdate" />
+  <v-container>
+    <TopList :items="items" @update="handleUpdate" @delete="handleDelete" />
     <TopForm @submit="handleSubmit" />
   </v-container>
 </template>

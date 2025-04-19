@@ -1,49 +1,39 @@
-<!-- src/components/PeopleForm.vue -->
 <script setup lang="ts">
-import { ref, defineEmits } from 'vue';
-
+import { ref } from 'vue';
 const emit = defineEmits(['submit']);
 
-const taskInput = ref('');
-const internshipInput = ref('');
-const statusInput = ref('');
-const currentJobInput = ref('');
-const annualIncomeInput = ref(null);
+const title = ref('');
+const internship = ref('');
+const status = ref('');
+const currentJob = ref('');
+const annualIncome = ref<number | null>(null);
 
 const handleSubmit = () => {
   emit('submit', {
-    title: taskInput.value,
-    internship: internshipInput.value,
-    status: statusInput.value,
-    currentJob: currentJobInput.value,
-    annualIncome: annualIncomeInput.value,
+    title: title.value,
+    internship: internship.value,
+    status: status.value,
+    currentJob: currentJob.value,
+    annualIncome: annualIncome.value,
     timestamp: new Date()
   });
 
-  taskInput.value = '';
-  internshipInput.value = '';
-  statusInput.value = '';
-  currentJobInput.value = '';
-  annualIncomeInput.value = null;
+  // フォーム初期化
+  title.value = '';
+  internship.value = '';
+  status.value = '';
+  currentJob.value = '';
+  annualIncome.value = null;
 };
 </script>
 
 <template>
-  <div class="input-form">
-    <v-text-field v-model="taskInput" label="ニックネーム" class="mx-2" />
-    <v-text-field v-model="internshipInput" label="インターン経験" class="mx-2" />
-    <v-select v-model="statusInput" :items="['在校生', '卒業生', 'トランスファー']" label="ステータス" class="mx-2" />
-    <v-text-field v-model="currentJobInput" label="今の職場" class="mx-2" />
-    <v-text-field v-model="annualIncomeInput" label="年収（万円）" type="number" class="mx-2" />
-    <v-btn class="submit-button" @click="handleSubmit">送信</v-btn>
-  </div>
+  <v-container>
+    <v-text-field v-model="title" label="ニックネーム" />
+    <v-text-field v-model="internship" label="インターン経験" />
+    <v-select :items="['在校生', '卒業生', 'トランスファー']" v-model="status" label="ステータス" />
+    <v-text-field v-model="currentJob" label="今の職場" />
+    <v-text-field v-model="annualIncome" label="年収" type="number" />
+    <v-btn color="primary" @click="handleSubmit">送信</v-btn>
+  </v-container>
 </template>
-
-<style scoped>
-.input-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 50%;
-}
-</style>

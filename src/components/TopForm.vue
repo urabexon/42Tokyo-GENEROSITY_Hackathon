@@ -28,12 +28,12 @@ const handleSubmit = () => {
 </script>
 
 <template>
-	<v-container>
-	  <v-text-field v-model="title" label="ニックネーム" class="custom-input" />
-	  <v-text-field v-model="internship" label="インターン経験" class="custom-input" />
-	  <v-select :items="['在校生', '卒業生', 'トランスファー']" v-model="status" label="ステータス" class="custom-input" />
-	  <v-text-field v-model="currentJob" label="今の職場" class="custom-input" />
-	  <v-text-field v-model="annualIncome" label="年収" type="number" class="custom-input" />
-	  <v-btn color="primary" @click="handleSubmit" class="custom-button">送信</v-btn>
-	</v-container>
-  </template>
+  <v-container>
+    <v-text-field v-model="title" label="ニックネーム" class="custom-input" />
+    <v-text-field v-model="internship" label="インターン経験" class="custom-input" />
+    <v-select :items="['在校生', '卒業生', 'トランスファー']" v-model="status" label="ステータス" class="custom-input" />
+    <v-text-field v-model="currentJob" label="今の職場" class="custom-input" />
+    <v-text-field v-model="annualIncome" label="年収(万円)" type="number" class="custom-input" />
+    <v-btn color="primary" @click="handleSubmit" class="custom-button">送信</v-btn>
+  </v-container>
+</template>

@@ -1,4 +1,18 @@
 <script setup lang="ts">
+interface Item {
+  id: string;
+  nickname: string;
+  status: string;
+  age?: number;
+  gender?: string;
+  internship?: string;
+  currentJob?: string;
+  jobType?: string;
+  annualIncome?: number;
+  message?: string;
+  timestamp?: any; // Firebase Timestamp
+}
+const items = ref<Item[]>([]);
 import { ref, computed, onMounted } from 'vue';
 import { db } from '@/firebase/firebase';
 import {
@@ -14,8 +28,6 @@ import {
 
 import TopForm from '@/components/TopForm.vue';
 import TopList from '@/components/TopList.vue';
-
-const items = ref<any[]>([]);
 const statusFilter = ref('全て'); // フィルタ用のステータス
 const jobFilter = ref('全て');
 const internFilter = ref('全て');
@@ -50,7 +62,10 @@ const statistics = computed(() => {
 const fetchData = async () => {
   const q = query(collection(db, 'tasks'), orderBy('timestamp', 'desc'));
   const snapshot = await getDocs(q);
-  items.value = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+  items.value = snapshot.docs.map(doc => {
+  const data = doc.data() as Omit<Item, 'id'>; // `id` 以外の型にする
+  return { ...data, id: doc.id };
+});
 };
 
 onMounted(fetchData);
@@ -71,7 +86,7 @@ const filteredItems = computed(() => {
         internFilter.value === null ||
         item.internship === internFilter.value;
     // annualIncome が undefined/null の場合は 0 として扱う
-    const income = item.annualIncome;
+    const income = item.annualIncome ?? 0;
     console.log("maxSalary.value:", maxSalary.value);
     const matchMinSalary = 
         minSalary.value === null || income >= minSalary.value;
@@ -84,24 +99,24 @@ const filteredItems = computed(() => {
 
 
 // 新しいタスクを追加する関数
-const handleSubmit = async (newItem) => {
+const handleSubmit = async (newItem: Omit<Item, 'id'>) => {
   const docRef = await addDoc(collection(db, 'tasks'), newItem);
   items.value.unshift({ ...newItem, id: docRef.id });
 };
 
-// タスクを更新する関数
-const handleUpdate = async (updatedItem) => {
+const handleUpdate = async (updatedItem: Item) => {
   const refDoc = doc(db, 'tasks', updatedItem.id);
-  await updateDoc(refDoc, updatedItem);
+  const { id, ...data } = updatedItem;
+  await updateDoc(refDoc, data);
   const index = items.value.findIndex(item => item.id === updatedItem.id);
   if (index !== -1) items.value[index] = updatedItem;
 };
 
-// タスクを削除する関数
-const handleDelete = async (id) => {
+const handleDelete = async (id: string) => {
   await deleteDoc(doc(db, 'tasks', id));
   items.value = items.value.filter(item => item.id !== id);
 };
+
 
 </script>
 

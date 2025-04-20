@@ -17,7 +17,9 @@ import TopList from '@/components/TopList.vue';
 
 const items = ref<any[]>([]);
 const statusFilter = ref('全て'); // フィルタ用のステータス
-const jobFilter = ref('全て')
+const jobFilter = ref('全て');
+const internFilter = ref('全て');
+const jobTypeFilter = ref('全て');
 
 const minSalary = ref<number | null>(null);
 const maxSalary = ref<number | null>(null);
@@ -25,11 +27,24 @@ const maxSalary = ref<number | null>(null);
 const clearFilters = () => {
     statusFilter.value = '全て';
     internFilter.value = '全て';
-    jobTypeFilter.value = '全て'; // ← 追加
+    jobTypeFilter.value = '全て';
+    jobFilter.value = '全て';
     minSalary.value = null;
     maxSalary.value = null;
 };
 
+const statistics = computed(() => {
+    const salaries = filteredItems.value
+        .map(item => item.annualIncome)
+        .filter(val => typeof val === 'number');
+
+    const count = salaries.length;
+    const average = count ? Math.round(salaries.reduce((a, b) => a + b, 0) / count) : 0;
+    const max = count ? Math.max(...salaries) : 0;
+    const min = count ? Math.min(...salaries) : 0;
+
+    return { count, average, max, min };
+});
 
 // タスクデータを取得する関数
 const fetchData = async () => {

@@ -18,6 +18,7 @@ import TopList from '@/components/TopList.vue';
 const items = ref<any[]>([]);
 const statusFilter = ref('全て'); // フィルタ用のステータス
 const jobFilter = ref('全て')
+const internFilter = ref('全て')
 
 const minSalary = ref<number | null>(null);
 const maxSalary = ref<number | null>(null);
@@ -25,6 +26,7 @@ const maxSalary = ref<number | null>(null);
 const clearFilters = () => {
   statusFilter.value = '全て'
   jobFilter.value = '全て'
+  internFilter.value = '全て';
   minSalary.value = null;  // 修正: refのvalueを直接変更
   maxSalary.value = null;
 }
@@ -50,6 +52,10 @@ const filteredItems = computed(() => {
       jobFilter.value === null ||
       item.currentJob === jobFilter.value;
 
+    const matchIntern =
+        internFilter.value === '全て' ||
+        internFilter.value === null ||
+        item.internship === internFilter.value;
     // annualIncome が undefined/null の場合は 0 として扱う
     const income = item.annualIncome;
     console.log("maxSalary.value:", maxSalary.value);
@@ -57,7 +63,7 @@ const filteredItems = computed(() => {
         minSalary.value === null || income >= minSalary.value;
     const matchMaxSalary =
       maxSalary.value === null || income <= maxSalary.value;
-    return matchStatus && matchJob && matchMinSalary && matchMaxSalary;
+    return matchStatus && matchIntern && matchJob && matchMinSalary && matchMaxSalary;
   });
 });
 
@@ -113,6 +119,13 @@ const handleDelete = async (id) => {
       label="ステータスで絞り込み"
       class="mx-auto"
       style="max-width: 300px"
+    />
+    <v-combobox
+    v-model="internFilter"
+    :items="['GENEROSITY', 'MIXI', 'REAZON HOLDINGS', 'aws']"
+    label="インターン経験で絞り込み（自由入力OK）"
+    class="mx-auto"
+    style="max-width: 300px"
     />
     <v-combobox
     v-model="jobFilter"

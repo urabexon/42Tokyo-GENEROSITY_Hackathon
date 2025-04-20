@@ -253,5 +253,9 @@ onMounted(async () => {
 </script>
 
 <template>
+	 <div class="logo-container">
+    <pre class="logo-text"><span class="prompt">$</span> <span class="command">./careertracker</span> <span class="cursor"></span></pre>
+    <div class="logo-subtitle">42生のキャリアを可視化する</div>
+  </div>
   <HomeList/>
 </template>

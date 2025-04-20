@@ -14,5 +14,6 @@ declare module 'vue' {
     TopForm: typeof import('./src/components/TopForm.vue')['default']
     TopItem: typeof import('./src/components/TopItem.vue')['default']
     TopList: typeof import('./src/components/TopList.vue')['default']
+    TopTitle: typeof import('./src/components/TopTitle.vue')['default']
   }
 }

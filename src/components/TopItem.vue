@@ -1,29 +1,47 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 
-const props = defineProps({
-    item: Object
-});
+interface Item {
+  id: string;
+  nickname: string;
+  status: string;
+  age?: number;
+  gender?: string;
+  internship?: string;
+  currentJob?: string;
+  jobType?: string;
+  annualIncome?: number;
+  message?: string;
+  timestamp?: any;
+}
 
-const emit = defineEmits(['delete', 'update']);
+const props = defineProps<{
+  item: Item;
+}>();
+
+const emit = defineEmits<{
+  (e: 'delete', id: string): void;
+  (e: 'update', item: Item): void;
+}>();
+
 const isEditing = ref(false);
 const edited = ref({ ...props.item });
 
-// props.itemが変わったらeditedも更新
 watch(() => props.item, (newVal) => {
-    edited.value = { ...newVal };
+  edited.value = { ...newVal };
 });
 
 const save = () => {
-    emit('update', { ...edited.value });
-    isEditing.value = false;
+  emit('update', { ...edited.value });
+  isEditing.value = false;
 };
 
 const cancel = () => {
-    edited.value = { ...props.item };
-    isEditing.value = false;
+  edited.value = { ...props.item };
+  isEditing.value = false;
 };
 </script>
+
 
 <template>
     <v-list-item>

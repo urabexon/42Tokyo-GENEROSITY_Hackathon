@@ -25,7 +25,6 @@ const maxSalary = ref<number | null>(null);
 const clearFilters = () => {
   statusFilter.value = '全て'
   jobFilter.value = '全て'
-  jobFilter.value = '全て';
   minSalary.value = null;  // 修正: refのvalueを直接変更
   maxSalary.value = null;
 }
@@ -62,6 +61,26 @@ const filteredItems = computed(() => {
   });
 });
 
+const statistics = computed(() => {
+  console.log("filteredItems.value:", filteredItems.value);
+
+  const incomes = filteredItems.value
+    .map(item => Number(item.annualIncome)) // ← 数値に変換
+    .filter(i => !isNaN(i));                // ← NaNは除外
+
+  const total = incomes.reduce((sum, val) => sum + val, 0);
+  const count = incomes.length;
+  const average = count > 0 ? Math.round(total / count) : 0;
+  const max = count > 0 ? Math.max(...incomes) : 0;
+  const min = count > 0 ? Math.min(...incomes) : 0;
+
+  return {
+    count,
+    average,
+    max,
+    min
+  };
+});
 
 
 // 新しいタスクを追加する関数
@@ -125,6 +144,20 @@ const handleDelete = async (id) => {
     <div class="text-center mb-4">
       <div>{{ filteredItems.length }}件見つかりました</div>
     </div>
+    <!-- 件数表示の下あたりに追加 -->
+    <div class="text-center mb-4">
+  <div>📈 統計情報</div>
+  <div v-if="statistics.count > 0">
+    平均年収：{{ statistics.average }} 万円<br />
+    最高年収：{{ statistics.max }} 万円<br />
+    最低年収：{{ statistics.min }} 万円
+  </div>
+  <div v-else>
+    該当する年収データがありません
+  </div>
+</div>
+
+
 
     <!-- フィルタリングされたタスクのリスト -->
     <TopList :items="filteredItems" @update="handleUpdate" @delete="handleDelete" />

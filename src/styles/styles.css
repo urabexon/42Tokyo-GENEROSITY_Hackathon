@@ -1,0 +1,321 @@
+/* 令和スタイリッシュ - ダークテーマCSS（カスタムクラス対応版） */
+
+/* 全体のスタイル */
+.v-container {
+	background-color: #121212;
+	color: #ffffff;
+	border-radius: 8px;
+	padding: 24px !important;
+	position: relative;
+	overflow: hidden;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  }
+  
+  .v-container::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 4px;
+	background: linear-gradient(90deg, #00babc, #00e0e3, #00babc);
+	background-size: 200% 100%;
+	animation: gradient-animation 3s ease infinite;
+	will-change: background-position;
+	transform: translateZ(0);
+  }
+  
+  @keyframes gradient-animation {
+	0% {
+	  background-position: 0% 50%;
+	}
+	50% {
+	  background-position: 100% 50%;
+	}
+	100% {
+	  background-position: 0% 50%;
+	}
+  }
+  
+  /* 見出しスタイル */
+  .custom-title {
+	font-weight: 600 !important;
+	font-size: 2rem !important;
+	color: #ffffff !important;
+	text-align: center !important;
+	margin-bottom: 32px !important;
+	letter-spacing: 2px !important;
+	text-transform: uppercase !important;
+	position: relative !important;
+	padding-bottom: 16px !important;
+  }
+  
+  .custom-title::after {
+	content: "";
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 60px;
+	height: 3px;
+	background-color: #00babc;
+  }
+  
+  /* カードスタイル */
+  .custom-container {
+	background-color: #1e1e1e !important;
+	border-radius: 8px !important;
+	padding: 24px !important;
+	margin-bottom: 24px !important;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+	border-left: 3px solid #00babc !important;
+	transition: all 0.3s ease !important;
+  }
+  
+  .custom-container:hover {
+	transform: translateY(-4px) !important;
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3) !important;
+  }
+  
+  /* 入力フィールドスタイル */
+  .custom-input .v-field__input {
+	background-color: #2d2d2d !important;
+	border-radius: 4px !important;
+	border: 1px solid #3a3a3a !important;
+	color: #ffffff !important;
+  }
+  
+  .custom-input .v-field__input:focus {
+	border-color: #00babc !important;
+  }
+  
+  .custom-input .v-field__outline {
+	opacity: 0 !important;
+  }
+  
+  .custom-input .v-label {
+	color: #00babc !important;
+  }
+  
+  /* 古いバージョンとの互換性 */
+  .custom-input .v-input__slot {
+	background-color: #2d2d2d !important;
+	border-radius: 4px !important;
+	border: 1px solid #3a3a3a !important;
+	color: #ffffff !important;
+  }
+  
+  .custom-input .v-input__slot:focus-within {
+	border-color: #00babc !important;
+  }
+  
+  .custom-input .v-text-field__slot input {
+	color: #ffffff !important;
+  }
+  
+  /* ちらつき防止 */
+  .custom-input input,
+  .custom-input textarea,
+  .custom-input .v-select__selection {
+	color: #ffffff !important;
+	text-shadow: none !important;
+	-webkit-font-smoothing: antialiased !important;
+	backface-visibility: hidden !important;
+  }
+  
+  /* セレクトフィールドスタイル */
+  .custom-input.v-select .v-field__input {
+	background-color: #2d2d2d !important;
+	border-radius: 4px !important;
+	border: 1px solid #3a3a3a !important;
+	color: #ffffff !important;
+  }
+  
+  .custom-input.v-select .v-field__input:focus {
+	border-color: #00babc !important;
+  }
+  
+  .custom-input.v-select .v-field__outline {
+	opacity: 0 !important;
+  }
+  
+  .custom-input.v-select .v-list {
+	background-color: #1e1e1e !important;
+	color: #ffffff !important;
+	border: 1px solid #3a3a3a !important;
+  }
+  
+  .custom-input.v-select .v-list-item {
+	color: #ffffff !important;
+  }
+  
+  .custom-input.v-select .v-list-item--active {
+	background-color: rgba(0, 186, 188, 0.2) !important;
+	color: #00babc !important;
+  }
+  
+  .custom-input.v-select .v-list-item:hover {
+	background-color: #2a2a2a !important;
+  }
+  
+  /* ボタンスタイル */
+  .custom-button {
+	background-color: #00babc !important;
+	color: #ffffff !important;
+	border-radius: 4px !important;
+	font-weight: 500 !important;
+	letter-spacing: 1px !important;
+	text-transform: uppercase !important;
+	box-shadow: 0 4px 8px rgba(0, 186, 188, 0.3) !important;
+	transition: all 0.3s ease !important;
+	border: none !important;
+  }
+  
+  .custom-button:hover {
+	background-color: #00a2a4 !important;
+	box-shadow: 0 6px 12px rgba(0, 186, 188, 0.4) !important;
+	transform: translateY(-2px) !important;
+  }
+  
+  /* 補助ボタン（キャンセル・エラーなど） */
+  .custom-button.error,
+  .custom-button.cancel,
+  .custom-button.secondary {
+	background-color: transparent !important;
+	color: #00babc !important;
+	border: 1px solid #00babc !important;
+	border-radius: 4px !important;
+	font-weight: 500 !important;
+	letter-spacing: 1px !important;
+	text-transform: uppercase !important;
+	transition: all 0.3s ease !important;
+	box-shadow: none !important;
+  }
+  
+  .custom-button.error:hover,
+  .custom-button.cancel:hover,
+  .custom-button.secondary:hover {
+	background-color: rgba(0, 186, 188, 0.1) !important;
+	transform: translateY(-2px) !important;
+  }
+  
+  /* リストアイテムスタイル */
+  .custom-list {
+	background-color: transparent !important;
+	border-radius: 8px !important;
+	overflow: hidden !important;
+  }
+  
+  .custom-list-item {
+	background-color: #252525 !important;
+	border-radius: 4px !important;
+	margin-bottom: 8px !important;
+	transition: all 0.3s ease !important;
+	border-left: 3px solid transparent !important;
+  }
+  
+  .custom-list-item:hover {
+	background-color: #2a2a2a !important;
+	border-left-color: #00babc !important;
+  }
+  
+  /* リストのタイトルスタイル */
+  .custom-list-item .v-list-item__title {
+	color: #00babc !important;
+	font-weight: 500 !important;
+	letter-spacing: 0.5px !important;
+  }
+  
+  .custom-list-item .v-list-item__subtitle {
+	color: rgba(255, 255, 255, 0.7) !important;
+	font-size: 0.85rem !important;
+  }
+  
+  .custom-list-item:hover .v-list-item__title {
+	color: #00e0e3 !important;
+  }
+  
+  /* リスト項目内のスタイリング */
+  .custom-list-item .v-list-item-title,
+  .custom-list-item .v-list-item-subtitle {
+	color: #00babc !important;
+	font-weight: 500 !important;
+  }
+  
+  .custom-list-item:hover .v-list-item-title,
+  .custom-list-item:hover .v-list-item-subtitle {
+	color: #00e0e3 !important;
+  }
+  
+  /* アイコンボタンスタイル */
+  .custom-icon-button {
+	background-color: #2d2d2d !important;
+	color: #ffffff !important;
+	border-radius: 4px !important;
+	transition: all 0.3s ease !important;
+	width: 36px !important;
+	height: 36px !important;
+  }
+  
+  .custom-icon-button.edit-button:hover,
+  .custom-icon-button[aria-label="edit"]:hover {
+	color: #00babc !important;
+	background-color: rgba(0, 186, 188, 0.1) !important;
+  }
+  
+  .custom-icon-button.delete-button:hover,
+  .custom-icon-button[aria-label="delete"]:hover {
+	color: #ff5252 !important;
+	background-color: rgba(255, 82, 82, 0.1) !important;
+  }
+  
+  /* スクロールバースタイル */
+  ::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+	background: #1e1e1e;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+	background: #00babc;
+	border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+	background: #00a2a4;
+  }
+  
+  /* ダークモード全体調整 */
+  body {
+	background-color: #0a0a0a;
+	color: #ffffff;
+  }
+  
+  .v-application {
+	background-color: #0a0a0a !important;
+	color: #ffffff !important;
+  }
+  
+  /* テキスト色調整 */
+  .v-list-item__title,
+  .v-list-item__subtitle {
+	color: #ffffff !important;
+  }
+  
+  /* ツールチップ調整 */
+  .v-tooltip__content {
+	background-color: #00babc !important;
+	color: #ffffff !important;
+  }
+  
+  /* アニメーション最適化 */
+  .custom-button:hover,
+  .custom-container:hover,
+  .custom-list-item:hover,
+  .custom-icon-button:hover {
+	will-change: transform;
+	transform: translateZ(0);
+  }

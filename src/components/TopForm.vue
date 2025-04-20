@@ -33,7 +33,7 @@ const handleSubmit = () => {
     <v-text-field v-model="internship" label="インターン経験" />
     <v-select :items="['在校生', '卒業生', 'トランスファー']" v-model="status" label="ステータス" />
     <v-text-field v-model="currentJob" label="今の職場" />
-    <v-text-field v-model="annualIncome" label="年収" type="number" />
+    <v-text-field v-model="annualIncome" label="年収(万円)" type="number" />
     <v-btn color="primary" @click="handleSubmit">送信</v-btn>
   </v-container>
 </template>

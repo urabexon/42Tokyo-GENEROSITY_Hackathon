@@ -17,20 +17,34 @@ import TopList from '@/components/TopList.vue';
 
 const items = ref<any[]>([]);
 const statusFilter = ref('全て'); // フィルタ用のステータス
-const jobFilter = ref('全て')
-const internFilter = ref('全て')
+const jobFilter = ref('全て');
+const internFilter = ref('全て');
+const jobTypeFilter = ref('全て');
 
 const minSalary = ref<number | null>(null);
 const maxSalary = ref<number | null>(null);
 
 const clearFilters = () => {
-  statusFilter.value = '全て'
-  jobFilter.value = '全て'
-  internFilter.value = '全て';
-  minSalary.value = null;  // 修正: refのvalueを直接変更
-  maxSalary.value = null;
-}
+    statusFilter.value = '全て';
+    internFilter.value = '全て';
+    jobTypeFilter.value = '全て';
+    jobFilter.value = '全て';
+    minSalary.value = null;
+    maxSalary.value = null;
+};
 
+const statistics = computed(() => {
+    const salaries = filteredItems.value
+        .map(item => item.annualIncome)
+        .filter(val => typeof val === 'number');
+
+    const count = salaries.length;
+    const average = count ? Math.round(salaries.reduce((a, b) => a + b, 0) / count) : 0;
+    const max = count ? Math.max(...salaries) : 0;
+    const min = count ? Math.min(...salaries) : 0;
+
+    return { count, average, max, min };
+});
 
 // タスクデータを取得する関数
 const fetchData = async () => {
@@ -67,26 +81,6 @@ const filteredItems = computed(() => {
   });
 });
 
-const statistics = computed(() => {
-  console.log("filteredItems.value:", filteredItems.value);
-
-  const incomes = filteredItems.value
-    .map(item => Number(item.annualIncome)) // ← 数値に変換
-    .filter(i => !isNaN(i));                // ← NaNは除外
-
-  const total = incomes.reduce((sum, val) => sum + val, 0);
-  const count = incomes.length;
-  const average = count > 0 ? Math.round(total / count) : 0;
-  const max = count > 0 ? Math.max(...incomes) : 0;
-  const min = count > 0 ? Math.min(...incomes) : 0;
-
-  return {
-    count,
-    average,
-    max,
-    min
-  };
-});
 
 
 // 新しいタスクを追加する関数
@@ -108,15 +102,16 @@ const handleDelete = async (id) => {
   await deleteDoc(doc(db, 'tasks', id));
   items.value = items.value.filter(item => item.id !== id);
 };
+
 </script>
 
 <template>
   <v-container>
     <!-- ステータスで絞り込むためのv-select -->
     <v-select
-      v-model="statusFilter"
-      :items="['全て', '在校生', '卒業生', 'トランスファー']"
-      label="ステータスで絞り込み"
+        v-model="statusFilter"
+        :items="['全て', '在校生', '卒業生', 'トランスファー']"
+        label="ステータスで絞り込み"
       class="mx-auto"
       style="max-width: 300px"
     />
@@ -124,30 +119,37 @@ const handleDelete = async (id) => {
     v-model="internFilter"
     :items="['GENEROSITY', 'MIXI', 'REAZON HOLDINGS', 'aws']"
     label="インターン経験で絞り込み（自由入力OK）"
-    class="mx-auto"
-    style="max-width: 300px"
+      class="mx-auto"
+      style="max-width: 300px"
+    />
+    <v-select
+        v-model="jobTypeFilter"
+        :items="['全て', 'Web系', 'SIer', 'フリーランス', 'スタートアップ', '未定']"
+        label="職種で絞り込み"
+        class="mx-auto"
+        style="max-width: 300px"
     />
     <v-combobox
-    v-model="jobFilter"
-    :items="['GENEROSITY', 'MIXI', 'REAZON HOLDINGS', 'aws']"
-    label="今の職場で絞り込み（自由入力OK）"
-    class="mx-auto"
-    style="max-width: 300px"
+        v-model="jobFilter"
+        :items="['GENEROSITY', 'MIXI', 'REAZON HOLDINGS', 'aws']"
+        label="今の職場で絞り込み（自由入力OK）"
+        class="mx-auto"
+        style="max-width: 300px"
     />
     <v-text-field
-    v-model.number="minSalary"
-    label="最低年収（万円）"
-    type="number"
-    class="mx-auto"
-    style="max-width: 300px"
+        v-model.number="minSalary"
+        label="最低年収（万円）"
+        type="number"
+        class="mx-auto"
+        style="max-width: 300px"
     />
 
     <v-text-field
-    v-model.number="maxSalary"
-    label="最高年収（万円）"
-    type="number"
-    class="mx-auto"
-    style="max-width: 300px"
+        v-model.number="maxSalary"
+        label="最高年収（万円）"
+        type="number"
+        class="mx-auto"
+        style="max-width: 300px"
     />
 
     <v-btn @click="clearFilters" color="primary" class="mt-4">

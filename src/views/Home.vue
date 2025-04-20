@@ -25,6 +25,9 @@ const maxSalary = ref<number | null>(null);
 const clearFilters = () => {
   statusFilter.value = '全て'
   jobFilter.value = '全て'
+  jobFilter.value = '全て';
+  minSalary.value = null;  // 修正: refのvalueを直接変更
+  maxSalary.value = null;
 }
 
 

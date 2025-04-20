@@ -48,7 +48,7 @@ const filteredItems = computed(() => {
 
     const matchJob =
       jobFilter.value === '全て' ||
-      jobFilter.value === ' ' ||
+      jobFilter.value === null ||
       item.currentJob === jobFilter.value;
 
     // annualIncome が undefined/null の場合は 0 として扱う
